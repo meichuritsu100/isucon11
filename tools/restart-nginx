@@ -1,0 +1,8 @@
+#!/bin/bash
+
+set -eu
+
+echo ":: CLEAR ACCESS LOGS    ====>"
+sudo truncate /var/log/nginx/access.log --size 0
+echo ":: RESTART NGINX    ====>"
+sudo systemctl restart nginx.service
