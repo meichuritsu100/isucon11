@@ -24,6 +24,9 @@ import (
 	"github.com/labstack/echo/v4"
 	"github.com/labstack/echo/v4/middleware"
 	"github.com/labstack/gommon/log"
+
+	_ "net/http/pprof" // 最後に消す
+	"runtime"
 )
 
 const (
@@ -207,12 +210,16 @@ func init() {
 }
 
 func main() {
+	runtime.SetBlockProfileRate(1)    // 最後に消す
+	runtime.SetMutexProfileFraction(1)// 最後に消す
 	e := echo.New()
 	e.Debug = true
 	e.Logger.SetLevel(log.DEBUG)
 
 	e.Use(middleware.Logger())
 	e.Use(middleware.Recover())
+
+	e.GET("/debug/pprof/*", echo.WrapHandler(http.DefaultServeMux))// 最後に消す
 
 	e.POST("/initialize", postInitialize)
 
