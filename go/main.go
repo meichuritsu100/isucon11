@@ -1093,7 +1093,7 @@ func calculateConditionLevel(condition string) (string, error) {
 // ISUの性格毎の最新のコンディション情報
 func getTrend(c echo.Context) error {
 	trendIsuConditionsList := []TrendIsuConditions{}
-	err := db.Select(&trendIsuConditionsList, "select a.id, a.jia_isu_uuid, a.character, max(b.timestamp) as timestamp, b.condition from isu a inner join isu_condition b on a.jia_isu_uuid = b.jia_isu_uuid group by jia_isu_uuid")
+	err := db.Select(&trendIsuConditionsList, "select d.id, c.jia_isu_uuid, d.character, c.timestamp, c.condition from (select a.jia_isu_uuid,a.timestamp,b.condition from (select jia_isu_uuid,max(timestamp) as timestamp from isu_condition group by jia_isu_uuid) as a inner join isu_condition as b on a.jia_isu_uuid = b.jia_isu_uuid and a.timestamp = b.timestamp) as c inner join isu as d on c.jia_isu_uuid = d.jia_isu_uuid")
 
 	if err != nil {
 		c.Logger().Errorf("db error: %v", err)
