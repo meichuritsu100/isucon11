@@ -5,3 +5,4 @@
 /ruby
 /rust
 ec256-public.pem
+*.swp
