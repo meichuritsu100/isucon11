@@ -84,15 +84,15 @@ type GetIsuListResponse struct {
 }
 
 type GetIsuList struct {
-	IsuID      int       `json:"isu_id"`
-	Name       string    `json:"name"`
-	Character  string    `json:"character"`
-	ID         int       `json:"id"`
-	JIAIsuUUID string    `json:"jia_isu_uuid"`
-	Timestamp  time.Time `json:"timestamp"`
-	IsSitting  bool      `json:"is_sitting"`
-	Condition  string    `json:"condition"`
-	Message    string    `json:"message"`
+	IsuID      int       `db:"isu_id"`
+	Name       string    `db:"name"`
+	Character  string    `db:"character"`
+	ID         int       `db:"id"`
+	JIAIsuUUID string    `db:"jia_isu_uuid"`
+	Timestamp  time.Time `db:"timestamp"`
+	IsSitting  bool      `db:"is_sitting"`
+	Condition  string    `db:"condition"`
+	Message    string    `db:"message"`
 }
 
 type IsuCondition struct {
