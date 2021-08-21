@@ -1,0 +1,9 @@
+#!/bin/bash
+
+set -eu
+
+echo ":: RESTART MySQL    ====>"
+# mysql(mysqld?) を restart した方がいい？
+# sudo systemctl restart mysql.service
+/home/isucon/webapp/sql/init.sh
+

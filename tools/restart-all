@@ -1,0 +1,7 @@
+#!/bin/bash
+
+set -eu
+
+/home/isucon/webapp/tools/restart-nginx
+/home/isucon/webapp/tools/restart-golang
+/home/isucon/webapp/tools/restart-mysql
