@@ -489,7 +489,7 @@ func getIsuList(c echo.Context) error {
 	getIsuLists := []GetIsuList{}
 	err = tx.Select(
 		&getIsuLists,
-		"select a.id as isu_id, a.name,a.character, b.id,b.jia_isu_uuid,max(b.timestamp) as timestamp,b.is_sitting,b.condition,b.message from isu a inner join isu_condition b on a.jia_isu_uuid = b.jia_isu_uuid where a.jia_user_id = ? group by b.jia_isu_uuid;",
+		"select a.id as isu_id, a.name,a.character, b.id,b.jia_isu_uuid,max(b.timestamp) as timestamp,b.is_sitting,b.condition,b.message from isu a left join isu_condition b on a.jia_isu_uuid = b.jia_isu_uuid where a.jia_user_id = ? group by b.jia_isu_uuid;",
 		jiaUserID)
 	if err != nil {
 		c.Logger().Errorf("db error: %v", err)
@@ -498,6 +498,9 @@ func getIsuList(c echo.Context) error {
 
 	responseList := []GetIsuListResponse{}
 	for _, getisulist := range getIsuLists {
+		if getisulist.Condition == "" {
+			continue
+		}
 		var formattedCondition *GetIsuConditionResponse
 		conditionLevel, err := calculateConditionLevel(getisulist.Condition)
 		if err != nil {
