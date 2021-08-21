@@ -1094,6 +1094,7 @@ func calculateConditionLevel(condition string) (string, error) {
 func getTrend(c echo.Context) error {
 	trendIsuConditionsList := []TrendIsuConditions{}
 	err := db.Select(&trendIsuConditionsList, "select a.id, a.jia_isu_uuid, a.character, max(b.timestamp) as timestamp, b.condition from isu a inner join isu_condition b on a.jia_isu_uuid = b.jia_isu_uuid group by jia_isu_uuid")
+
 	if err != nil {
 		c.Logger().Errorf("db error: %v", err)
 		return c.NoContent(http.StatusInternalServerError)
@@ -1106,12 +1107,18 @@ func getTrend(c echo.Context) error {
 	for _, trendIsu := range trendIsuConditionsList {
 		conditionLevel, err := calculateConditionLevel(trendIsu.Condition)
 		if err != nil {
-			c.Logger().Error(err)
+			c.Logger().Errorf("okasiiyo: %v", err)
 			return c.NoContent(http.StatusInternalServerError)
 		}
 		trendCondition := TrendCondition{
 			ID:        trendIsu.ID,
 			Timestamp: trendIsu.Timestamp.Unix(),
+		}
+		if len(characterResMap[trendIsu.Character]) < 3 {
+			for i := 0; i < 3; i++ {
+				emptyTrendConditions := []*TrendCondition{}
+				characterResMap[trendIsu.Character] = append(characterResMap[trendIsu.Character], emptyTrendConditions)
+			}
 		}
 		switch conditionLevel {
 		case "info":
