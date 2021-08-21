@@ -3,4 +3,6 @@
 set -eu
 
 echo ":: RESTART GOLANG    ====>"
+cd /home/isucon/webapp/go
+go build
 sudo systemctl restart isucondition.go.service
